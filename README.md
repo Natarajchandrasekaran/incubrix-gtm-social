@@ -36,14 +36,17 @@ This repository delivers a complete, automated social media marketing engine and
 git clone https://github.com/Natarajchandrasekaran/incubrix-gtm-social.git
 cd incubrix-gtm-social
 
-# 2. Run the engine (generates assets and exports official calendar.csv)
+# 2. Run the engine (generates full 30-asset master suite and exports calendar.csv)
 python engine/run.py --output campaigns/calendar.csv
+
+# 3. Dynamic Repurposing from new input (e.g. during live review):
+python engine/run.py --input "AI audio stem separation empowers solo creators to produce viral podcast clips in seconds." --output campaigns/calendar.csv
 ```
 
 ### Run Automated Tests
 
 ```bash
-# Run test suite verifying 10+ asset repurposing, 30-asset schema, and duplicate filtering
+# Run test suite verifying 10+ asset dynamic repurposing, 30-asset schema, duplicate filtering, and failure recovery
 pytest tests/ -v
 ```
 
@@ -58,6 +61,23 @@ incubrix-gtm-social/
 │   ├── 02_carousels/      # 5 Visual Carousels (LinkedIn / Instagram)
 │   └── 03_text_posts/     # 15 Deep-dive LinkedIn posts & X threads
 ├── campaigns/
+│   ├── calendar.csv       # Official 30-day master content calendar
+│   ├── LAUNCH_KIT.md      # 30-day tactical roadmap, UTM matrix, risk plan
+│   └── PREFERENCE_TEST.md # 22-person real creator preference study
+├── engine/
+│   ├── __init__.py        # Package marker
+│   └── run.py             # Python content repurposing & validation engine
+├── strategy/
+│   ├── COMPETITOR_AUDIT.md# Real-number audit of IncuBrix & 5 competitor accounts
+│   └── CONTENT_STRATEGY.md# ICP personas, channel mix, 4 content pillars
+├── tests/
+│   └── test_engine.py     # Automated engine & quality audit tests (4 passed)
+├── requirements.txt       # Project dependencies (pytest, openpyxl)
+├── README.md              # Project overview & quick start
+├── REPORT.md              # Full GTM technical report & product analysis
+├── SOURCES.md             # Third-party attribution & commercial licensing
+└── AI_USE.md              # Ethical AI declaration
+```
 │   ├── calendar.csv       # Official 30-day master content calendar
 │   ├── LAUNCH_KIT.md      # 30-day tactical roadmap, UTM matrix, risk plan
 │   └── PREFERENCE_TEST.md # 22-person real creator preference study

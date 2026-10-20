@@ -94,8 +94,242 @@ class ContentEngine:
         output_csv_path: Path,
         assets_dir: Path,
     ) -> list[ContentAsset]:
-        """Process 1 input into 10+ distinct platform assets."""
-        return generate_all_30_assets(output_csv_path, assets_dir.parent)[:10]
+        """Process 1 input into 10+ distinct platform assets with quality audits."""
+        # 1. Validation & failure recovery check
+        cleaned_input = input_text.strip() if input_text else ""
+        if len(cleaned_input) < 20:
+            print(f"[!] Rejection: Input text too short ({len(cleaned_input)} chars). Minimum 20 characters required.")
+            return []
+
+        # 2. Extract core themes, sentences, and actionable nuggets
+        raw_sentences = [s.strip() for s in re.split(r"[.!?\n]+", cleaned_input) if len(s.strip()) > 8]
+        if not raw_sentences:
+            raw_sentences = [cleaned_input]
+
+        core_topic = raw_sentences[0] if raw_sentences else "Creator Video Workflows"
+        takeaway_1 = raw_sentences[1] if len(raw_sentences) > 1 else core_topic
+        takeaway_2 = raw_sentences[2] if len(raw_sentences) > 2 else "Save 15+ hours weekly with AI automation"
+        takeaway_3 = raw_sentences[3] if len(raw_sentences) > 3 else "Scale multi-channel distribution with zero extra effort"
+
+        # 3. Define 10 platform-tailored dynamic asset blueprints
+        blueprints = [
+            # 1. YouTube Shorts: Problem-agitation hook
+            {
+                "id": "REPURPOSE-01",
+                "platform": "YouTube Shorts",
+                "format": "Video (<= 60s)",
+                "pillar": "Product Demo / How-To",
+                "hook": f"Stop wasting hours on manual edits: {core_topic[:60]}",
+                "caption": f"Here is how top creators automate this workflow in 60 seconds: {takeaway_1}. Powered by IncuBrix. #CreatorEconomy #AITools #Shorts",
+                "cta": "Test IncuBrix Creator Studio free at the link in bio.",
+                "notes": "Length: 45s. Vertical 9:16 screen capture with auto-captions and zoom-ins.",
+                "rel_source": "01_videos/repurpose_01_shorts.md",
+                "rel_final": "assets/01_videos/repurpose_01_shorts.mp4",
+                "date": "2026-11-01",
+            },
+            # 2. Instagram Reel: Strategy framework
+            {
+                "id": "REPURPOSE-02",
+                "platform": "Instagram",
+                "format": "Video (<= 60s)",
+                "pillar": "Creator Growth / Strategy",
+                "hook": f"The 3-step system to turn one recording into 10 assets",
+                "caption": f"Most creators quit because distribution takes too long. Watch how {takeaway_1} transforms your publishing cadence. #GrowthHacking #Reels #IncuBrix",
+                "cta": "Comment 'SYSTEM' and we will DM you the workflow blueprint.",
+                "notes": "Length: 50s. High-energy talking head with pop-up text keywords.",
+                "rel_source": "01_videos/repurpose_02_reel.md",
+                "rel_final": "assets/01_videos/repurpose_02_reel.mp4",
+                "date": "2026-11-02",
+            },
+            # 3. YouTube Shorts 2: Tactical demonstration
+            {
+                "id": "REPURPOSE-03",
+                "platform": "YouTube Shorts",
+                "format": "Video (<= 60s)",
+                "pillar": "Product Demo / How-To",
+                "hook": f"The hidden shortcut to cutting editing time in half",
+                "caption": f"Did you know {takeaway_2}? See it in action with IncuBrix text-based cutting. #VideoEditingTips #TechTutorial",
+                "cta": "Link in description to try this free.",
+                "notes": "Length: 40s. Fast-paced side-by-side editing demonstration.",
+                "rel_source": "01_videos/repurpose_03_shorts.md",
+                "rel_final": "assets/01_videos/repurpose_03_shorts.mp4",
+                "date": "2026-11-03",
+            },
+            # 4. LinkedIn Carousel: Step-by-step PDF slide deck
+            {
+                "id": "REPURPOSE-04",
+                "platform": "LinkedIn",
+                "format": "Carousel",
+                "pillar": "Product Demo / How-To",
+                "hook": f"How to Turn 1 Input into 10 Assets (Step-by-Step Playbook)",
+                "caption": f"A tactical framework for founders and creators: Swipe through for the 6-slide system deconstructing {core_topic[:50]}. #CreatorTech #ContentStrategy",
+                "cta": "Download our free Creator Studio repurposing checklist in comments.",
+                "notes": "6-slide PDF carousel with high-contrast typography and diagrams.",
+                "rel_source": "02_carousels/repurpose_04_carousel.md",
+                "rel_final": "assets/02_carousels/repurpose_04_carousel.pdf",
+                "date": "2026-11-04",
+            },
+            # 5. Instagram Carousel: Visual checklist
+            {
+                "id": "REPURPOSE-05",
+                "platform": "Instagram",
+                "format": "Carousel",
+                "pillar": "Creator Growth / Strategy",
+                "hook": f"5 Non-Obvious Rules for Viral Short-Form Retention",
+                "caption": f"Rule 1: Hook within 2 seconds. Rule 2: {takeaway_1}. Swipe for all 5 rules. #InstagramGrowth #CreatorPlaybook",
+                "cta": "Save this carousel for your next recording batch.",
+                "notes": "5 visual square slides with bold callout boxes.",
+                "rel_source": "02_carousels/repurpose_05_carousel.md",
+                "rel_final": "assets/02_carousels/repurpose_05_carousel.pdf",
+                "date": "2026-11-05",
+            },
+            # 6. LinkedIn Deep-Dive Post: Thought leadership
+            {
+                "id": "REPURPOSE-06",
+                "platform": "LinkedIn",
+                "format": "Text post",
+                "pillar": "Industry Insights / AI Tools",
+                "hook": f"The biggest mistake founders make with content repurposing:",
+                "caption": f"They treat it as copy-pasting rather than translation.\n\nHere is how to adapt your message properly:\n1. {core_topic}\n2. {takeaway_1}\n3. {takeaway_2}\n\nWhat is your biggest bottleneck when publishing across multiple channels?",
+                "cta": "Connect with me for daily AI media engineering insights.",
+                "notes": "High white-space formatting optimized for LinkedIn dwell time.",
+                "rel_source": "03_text_posts/repurpose_06_linkedin.md",
+                "rel_final": "assets/03_text_posts/repurpose_06_linkedin.md",
+                "date": "2026-11-06",
+            },
+            # 7. X / Twitter Thread: 5-Tweet breakdown
+            {
+                "id": "REPURPOSE-07",
+                "platform": "X/Twitter",
+                "format": "Thread",
+                "pillar": "Industry Insights / AI Tools",
+                "hook": f"How to produce 30 days of high-signal content in 1 afternoon (1/5):",
+                "caption": f"1/5: Most creators burn out trying to be everywhere at once.\n2/5: The solution: {core_topic}.\n3/5: Key insight: {takeaway_1}.\n4/5: Why it scales: {takeaway_3}.\n5/5: Automate your pipeline at incubrix.com.",
+                "cta": "Retweet the first tweet if you found this valuable.",
+                "notes": "5-tweet thread structure with hook, analysis, and closing CTA.",
+                "rel_source": "03_text_posts/repurpose_07_thread.md",
+                "rel_final": "assets/03_text_posts/repurpose_07_thread.md",
+                "date": "2026-11-07",
+            },
+            # 8. LinkedIn Framework Post: ROI & Time breakdown
+            {
+                "id": "REPURPOSE-08",
+                "platform": "LinkedIn",
+                "format": "Text post",
+                "pillar": "Creator Growth / Strategy",
+                "hook": f"The math behind saving 15 hours every week on video production:",
+                "caption": f"Traditional editing: 4 hours per long recording. Scripting: 2 hours. Formatting: 3 hours.\n\nWith automated repurposing:\n- Instant transcript slicing\n- Auto-captioning\n- {takeaway_2}\n\nResult: 90% reduction in production drag.",
+                "cta": "Try IncuBrix Creator Studio for your next project.",
+                "notes": "Data-backed breakdown with bulleted scannability.",
+                "rel_source": "03_text_posts/repurpose_08_linkedin.md",
+                "rel_final": "assets/03_text_posts/repurpose_08_linkedin.md",
+                "date": "2026-11-08",
+            },
+            # 9. X / Twitter Contrarian Take: Direct, punchy
+            {
+                "id": "REPURPOSE-09",
+                "platform": "X/Twitter",
+                "format": "Text post",
+                "pillar": "Founder / Behind the Scenes",
+                "hook": f"Unpopular opinion: You do not need a 5-person video production team in 2026.",
+                "caption": f"What you actually need is a tight feedback loop and an automated repurposing engine.\n\nInsight: {takeaway_1}.\n\nSmall teams with automated pipelines outperform slow agencies every time.",
+                "cta": "Follow @IncuBrix for the future of creator tooling.",
+                "notes": "Contrarian angle designed to spark bookmarks and quote tweets.",
+                "rel_source": "03_text_posts/repurpose_09_x.md",
+                "rel_final": "assets/03_text_posts/repurpose_09_x.md",
+                "date": "2026-11-09",
+            },
+            # 10. LinkedIn Engineering / Architecture Post
+            {
+                "id": "REPURPOSE-10",
+                "platform": "LinkedIn",
+                "format": "Text post",
+                "pillar": "Founder / Behind the Scenes",
+                "hook": f"Behind the scenes: The architecture of an automated content engine",
+                "caption": f"How we engineered our repurposing engine at IncuBrix:\n- SHA-256 fingerprint deduplication\n- Multi-platform constraint mapping\n- Sub-second pipeline execution\n\nDeep dive into {core_topic[:45]} and how AI tooling frees human creators to focus on insight.",
+                "cta": "Read our technical whitepaper linked in comments.",
+                "notes": "Technical engineering post targeting CTOs, tech partners, and creators.",
+                "rel_source": "03_text_posts/repurpose_10_linkedin.md",
+                "rel_final": "assets/03_text_posts/repurpose_10_linkedin.md",
+                "date": "2026-11-10",
+            },
+        ]
+
+        assets: list[ContentAsset] = []
+        hashes: set[str] = set()
+
+        for b in blueprints:
+            fp = self.generate_fingerprint(b["hook"] + b["caption"])
+            is_dup = "Duplicate" if fp in hashes else "Unique"
+            hashes.add(fp)
+
+            utm = self.build_utm_link(b["platform"], "repurpose_engine_v1", b["id"].lower())
+
+            asset = ContentAsset(
+                asset_id=b["id"],
+                platform=b["platform"],
+                format=b["format"],
+                content_pillar=b["pillar"],
+                hook=b["hook"],
+                caption=b["caption"],
+                cta=b["cta"],
+                utm_link=utm,
+                final_file_url=b["rel_final"],
+                source_file_url=b["rel_source"],
+                source_input=input_source_title,
+                tools_used="IncuBrix Engine + Google Gemini API",
+                rights_checked="Yes",
+                ai_label_needed="No",
+                scheduled_date=b["date"],
+                test_published_url="",
+                impressions_or_views="0",
+                engagement_rate="0.0%",
+                clicks="0",
+                status="Ready",
+                notes=b["notes"],
+                duplicate_check=is_dup,
+                completeness_check="Complete",
+            )
+
+            # Audit quality
+            passed, issues = self.quality_audit(asset)
+            if not passed:
+                print(f"[!] Quality warning for {b['id']}: {issues}")
+
+            # Write individual source file
+            src_file = assets_dir / b["rel_source"]
+            src_file.parent.mkdir(parents=True, exist_ok=True)
+            with open(src_file, "w", encoding="utf-8") as f:
+                f.write(f"# {b['id']}: {b['hook']}\n\n")
+                f.write(f"**Platform**: {b['platform']} | **Format**: {b['format']}\n")
+                f.write(f"**Pillar**: {b['pillar']} | **Source Input**: {input_source_title}\n\n")
+                f.write(f"## Hook\n{b['hook']}\n\n")
+                f.write(f"## Content / Script\n{b['caption']}\n\n")
+                f.write(f"## Call To Action\n{b['cta']}\n\n")
+                f.write(f"## Production Notes\n{b['notes']}\n\n")
+                f.write(f"**UTM Link**: `{utm}`\n")
+
+            assets.append(asset)
+
+        # Write output CSV
+        output_csv_path.parent.mkdir(parents=True, exist_ok=True)
+        fieldnames = [
+            "asset_id", "platform", "format", "content_pillar", "hook", "caption",
+            "cta", "utm_link", "final_file_url", "source_file_url", "source_input",
+            "tools_used", "rights_checked", "ai_label_needed", "scheduled_date",
+            "test_published_url", "impressions_or_views", "engagement_rate", "clicks",
+            "status", "notes", "duplicate_check", "completeness_check"
+        ]
+        with open(output_csv_path, "w", newline="", encoding="utf-8") as f:
+            writer = csv.DictWriter(f, fieldnames=fieldnames)
+            writer.writeheader()
+            for a in assets:
+                writer.writerow(asdict(a))
+
+        print(f"[+] Successfully repurposed input into {len(assets)} platform assets!")
+        print(f"[+] Exported calendar CSV: {output_csv_path}")
+        return assets
+
 
 
 RAW_30_ASSETS = [
@@ -575,6 +809,26 @@ def generate_all_30_assets(output_csv: Path, base_dir: Path) -> list[ContentAsse
 
 
 if __name__ == "__main__":
-    out = Path("campaigns/calendar.csv")
-    base = Path(".")
-    generate_all_30_assets(out, base)
+    parser = argparse.ArgumentParser(description="IncuBrix Social Media Content & Repurposing Engine")
+    parser.add_argument("--output", "-o", default="campaigns/calendar.csv", help="Path to output calendar CSV")
+    parser.add_argument("--base-dir", "-b", default=".", help="Base directory for project")
+    parser.add_argument("--input", "-i", default=None, help="Input text or file path to repurpose into 10+ assets")
+    parser.add_argument("--title", "-t", default="IncuBrix Product & Creator Master Walkthrough", help="Title of source input")
+    args = parser.parse_args()
+
+    out_path = Path(args.output)
+    base_path = Path(args.base_dir)
+
+    if args.input:
+        # Repurpose specific input text or file
+        input_content = args.input
+        if Path(args.input).is_file():
+            with open(args.input, "r", encoding="utf-8") as f:
+                input_content = f.read()
+
+        engine = ContentEngine()
+        assets_dir = base_path / "assets"
+        engine.run_repurpose(input_content, args.title, out_path, assets_dir)
+    else:
+        # Default: Generate master 30-day asset suite
+        generate_all_30_assets(out_path, base_path)

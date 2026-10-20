@@ -77,3 +77,20 @@ def test_duplicate_detection():
     fp2 = engine.generate_fingerprint("Why 90% of your Shorts get stuck at 400 views!")
     # Normalized fingerprinting ignores punctuation and case
     assert fp1 == fp2
+
+
+def test_failure_and_recovery_empty_input():
+    """Verify engine handles malformed or empty inputs gracefully without crashing."""
+    engine = ContentEngine()
+    with tempfile.TemporaryDirectory() as tmpdir:
+        out_csv = Path(tmpdir) / "calendar.csv"
+        assets_dir = Path(tmpdir) / "assets"
+
+        # Empty string input
+        res1 = engine.run_repurpose("", "Empty Input", out_csv, assets_dir)
+        assert len(res1) == 0
+
+        # Sub-minimum length input (5 characters)
+        res2 = engine.run_repurpose("Short", "5 Chars", out_csv, assets_dir)
+        assert len(res2) == 0
+
