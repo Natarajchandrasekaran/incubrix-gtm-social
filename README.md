@@ -3,7 +3,7 @@
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Assets](https://img.shields.io/badge/assets-30%20ready-brightgreen.svg)]()
-[![Tests](https://img.shields.io/badge/tests-3%20passed-brightgreen.svg)]()
+[![Tests](https://img.shields.io/badge/tests-4%20passed-brightgreen.svg)]()
 
 > IncuBrix 2027 Graduate Hiring Assessment — Option 2: Social Media Marketing & Content Engine  
 > Candidate: **Nataraj Chandrasekaran** (PSG College of Technology, Coimbatore)  
