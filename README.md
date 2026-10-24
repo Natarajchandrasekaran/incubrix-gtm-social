@@ -77,22 +77,6 @@ incubrix-gtm-social/
 ├── REPORT.md              # Full GTM technical report & product analysis
 ├── SOURCES.md             # Third-party attribution & commercial licensing
 └── AI_USE.md              # Ethical AI declaration
-```
-│   ├── calendar.csv       # Official 30-day master content calendar
-│   ├── LAUNCH_KIT.md      # 30-day tactical roadmap, UTM matrix, risk plan
-│   └── PREFERENCE_TEST.md # 22-person real creator preference study
-├── engine/
-│   └── run.py             # Python content repurposing & validation engine
-├── strategy/
-│   └── CONTENT_STRATEGY.md# ICP personas, channel mix, 4 content pillars
-├── tests/
-│   └── test_engine.py     # Automated engine & quality audit tests
-├── README.md              # Project overview & quick start
-├── REPORT.md              # Full GTM technical report & product analysis
-├── SOURCES.md             # Third-party attribution & commercial licensing
-└── AI_USE.md              # Ethical AI declaration
-```
-
 ---
 
 ## 4. 30-Asset Portfolio Overview
